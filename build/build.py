@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "content" / "guide.md"
 OUT = ROOT / "docs" / "index.html"
 PDF_URL = ("https://github.com/Xx-D3V-xX/temp/blob/main/"
-           "CS413%20Blockchain%20Lab%20Exam%20Guide%20(Labs%201-9).pdf")
+           "CS414%20ITIMM%20Lab%20Exam%20Guide%20(Labs%201-12).pdf")
 
 # html=False: any raw HTML in the markdown is escaped, never injected.
 md = MarkdownIt("commonmark", {"html": False}).enable("table")
@@ -85,9 +85,10 @@ for idx, (title, body) in enumerate(sections):
     if kind == "viva":
         for ln in body:
             cells = [c.strip() for c in re.split(r"(?<!\\)\|", ln.strip().strip("|"))]
-            if len(cells) == 3 and cells[0].isdigit():
+            if len(cells) == 3 and (cells[0].isdigit() or cells[0].lower() == "all"):
                 clean = lambda t: t.replace("\\|", "|").replace("`", "")
-                FLASH.append({"lab": int(cells[0]), "q": clean(cells[1]), "a": clean(cells[2])})
+                lab = int(cells[0]) if cells[0].isdigit() else 99
+                FLASH.append({"lab": lab, "q": clean(cells[1]), "a": clean(cells[2])})
 
     seen = set()
     sub_html, chips = [], []
@@ -136,8 +137,8 @@ page = f"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CS413 Blockchain Lab Exam Guide</title>
-<meta name="description" content="Interactive guide for the CS413 Blockchain Technology lab end-semester exam: nine labs with code, test inputs, error fixes and viva answers.">
+<title>CS414 ITIMM Lab Exam Guide</title>
+<meta name="description" content="Interactive guide for the CS414 IT Infrastructure Monitoring and Management lab exam: twelve labs with commands, test inputs, error fixes and viva answers.">
 <link rel="stylesheet" href="assets/style.css">
 <link id="hl-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
 <link id="hl-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" disabled>
@@ -146,7 +147,7 @@ page = f"""<!doctype html>
 <body>
 <header class="topbar">
   <button id="menu" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
-  <a class="brand" href="#overview">CS413 <span>Lab Exam Guide</span></a>
+  <a class="brand" href="#overview">CS414 <span>Lab Exam Guide</span></a>
   <div class="search"><input id="q" type="search" placeholder="Search commands, errors, viva...  ( / )" autocomplete="off" aria-label="Search the guide"></div>
   <button id="theme" aria-label="Toggle dark mode" title="Toggle dark mode">&#9790;</button>
 </header>
@@ -179,7 +180,7 @@ page = f"""<!doctype html>
       <button id="fc-card" class="fc-card" aria-live="polite"><small id="fc-side">Question</small><p id="fc-text"></p><em>Click or press Space to flip</em></button>
       <div class="fc-nav"><button id="fc-prev">&larr; Previous</button><button id="fc-next">Next &rarr;</button></div>
     </section>
-    <footer>Built from the CS413 lab exam paper. Commands and versions on the exam machines may differ: read the supplied starter files first.</footer>
+    <footer>Built from the CS414 ITIMM lab exam paper. Commands and versions on the exam machines may differ: read the supplied starter files first.</footer>
   </main>
 </div>
 

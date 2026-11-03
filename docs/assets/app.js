@@ -88,7 +88,7 @@
       target.scrollIntoView({ block: 'start' });
       setTimeout(() => target.classList.remove('flash'), 1600);
     } else { scrollTo(0, 0); }
-    document.title = (nav.find(n => n.id === id) || { short: 'Viva flashcards' }).short + ' · CS413 Lab Exam Guide';
+    document.title = (nav.find(n => n.id === id) || { short: 'Viva flashcards' }).short + ' · CS414 ITIMM Lab Exam Guide';
   }
   function route() {
     const h = decodeURIComponent(location.hash.slice(1));
@@ -157,7 +157,7 @@
   /* ---------- flashcards ---------- */
   const cards = JSON.parse($('#flash-data').textContent);
   const labSel = $('#fc-lab');
-  [...new Set(cards.map(c => c.lab))].sort((a, b) => a - b).forEach(n => labSel.add(new Option('Lab ' + n, n)));
+  [...new Set(cards.map(c => c.lab))].sort((a, b) => a - b).forEach(n => labSel.add(new Option(n === 99 ? 'General' : 'Lab ' + n, n)));
   let deck = [], pos = 0, flipped = false;
   function buildDeck(shuffle) {
     const l = +labSel.value; deck = cards.filter(c => !l || c.lab === l);
@@ -167,14 +167,14 @@
   function paintCard() {
     flipped = false; const c = deck[pos], el = $('#fc-card');
     el.classList.remove('back');
-    $('#fc-side').textContent = c ? `Question · Lab ${c.lab}` : 'No cards';
+    $('#fc-side').textContent = c ? `Question · ${c.lab === 99 ? "General" : "Lab " + c.lab}` : 'No cards';
     $('#fc-text').textContent = c ? c.q : '';
     $('#fc-count').textContent = deck.length ? `${pos + 1} / ${deck.length}` : '';
   }
   function flip() {
     const c = deck[pos]; if (!c) return; flipped = !flipped;
     $('#fc-card').classList.toggle('back', flipped);
-    $('#fc-side').textContent = flipped ? `Answer · Lab ${c.lab}` : `Question · Lab ${c.lab}`;
+    $('#fc-side').textContent = flipped ? `Answer · ${c.lab === 99 ? "General" : "Lab " + c.lab}` : `Question · ${c.lab === 99 ? "General" : "Lab " + c.lab}`;
     $('#fc-text').textContent = flipped ? c.a : c.q;
   }
   const step = d => { if (!deck.length) return; pos = (pos + d + deck.length) % deck.length; paintCard(); };
